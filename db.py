@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 
 def get_db1():
-    engine = create_engine('mysql+mysqlconnector://root:@localhost/laplanduas_rental3002')
+    engine = create_engine('mysql+mysqlconnector://root:@localhost/laplanduas_rental_olli')
     db_session = sessionmaker(bind=engine)
     return db_session()
 
@@ -15,7 +15,7 @@ def get_db():
     _db = None
     try:
         print("###################### inside try")
-        engine = create_engine('mysql+mysqlconnector://root:@localhost/laplanduas_rental3002')
+        engine = create_engine('mysql+mysqlconnector://root:@localhost/laplanduas_rental_olli')
         db_session = sessionmaker(bind=engine)
         _db = db_session()
         print("############ yield db")
