@@ -41,25 +41,27 @@ def get_rentals_by_year(year):
 def get_top_rented_items_all_time():
     with get_db() as db:
         query = text("""
-            SELECT rental_items_id, COUNT(*) AS num_rentals
-            FROM rental_transactions
-            GROUP BY rental_items_id
-            ORDER BY num_rentals DESC
-            LIMIT 10;
-            """)
+        SELECT r.rental_items_id, i.name, COUNT(*) AS num_rentals
+        FROM rental_transactions r
+        JOIN rental_items i ON r.rental_items_id = i.id
+        GROUP BY r.rental_items_id, i.name
+        ORDER BY num_rentals DESC
+        LIMIT 10;
+        """)
         result = db.execute(query)
         return result.fetchall()
 
 def get_top_rented_items_by_year_and_month(year):
     with get_db() as db:
         query = text("""
-            SELECT MONTH(created_at) AS month, rental_items_id, COUNT(*) AS num_rentals
-            FROM rental_transactions
-            WHERE YEAR(created_at) = :year
-            GROUP BY MONTH(created_at), rental_items_id
-            ORDER BY month, num_rentals DESC
-            LIMIT 10;
-            """)
+        SELECT MONTH(r.created_at) AS month, i.name, COUNT(*) AS num_rentals
+        FROM rental_transactions r
+        JOIN rental_items i ON r.rental_items_id = i.id
+        WHERE YEAR(r.created_at) = :year
+        GROUP BY MONTH(r.created_at), i.name
+        ORDER BY month, num_rentals DESC
+        LIMIT 10;
+        """)
         result = db.execute(query, {'year': year})
         return result.fetchall()
 

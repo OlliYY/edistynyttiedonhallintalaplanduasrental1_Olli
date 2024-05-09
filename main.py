@@ -2,6 +2,13 @@ import categories
 import rental_items
 import users
 import query_functions as qf
+import calendar
+
+
+def month_name(month_number):
+    months = ["", "Tammikuu", "Helmikuu", "Maaliskuu", "Huhtikuu", "Toukokuu", "Kesäkuu",
+              "Heinäkuu", "Elokuu", "Syyskuu", "Lokakuu", "Marraskuu", "Joulukuu"]
+    return months[month_number]
 
 def main_menu():
     while True:
@@ -49,43 +56,50 @@ def main_menu():
             rental_items.rent_items()
 
 
+
         elif _choice == '8':
             year = int(input("Syötä vuosi: "))
             month = int(input("Syötä kuukausi (1-12): "))
+            month_str = month_name(month)
             results = qf.get_rentals_by_month_and_week(year, month)
             for week, count in results:
-                print(f"Viikko {week}, lainauksia: {count}")
+                print(f"Viikko {week} kuukaudessa {month_str}, lainauksia: {count}")
 
         elif _choice == '9':
             year = int(input("Syötä vuosi: "))
             month = int(input("Syötä kuukausi (1-12): "))
+            month_str = month_name(month)
             results = qf.get_rentals_by_day(year, month)
             for day, count in results:
-                print(f"Päivä {day}, lainauksia: {count}")
+                print(f"Päivä {day} kuukaudessa {month_str}, lainauksia: {count}")
 
         elif _choice == '10':
             year = int(input("Syötä vuosi: "))
             results = qf.get_rentals_by_year(year)
-            for month, count in results:
-                print(f"Kuukausi {month}, lainauksia: {count}")
+            for month_num, count in results:
+                month_str = month_name(month_num)
+                print(f"Kuukausi {month_str}, lainauksia: {count}")
 
         elif _choice == '11':
             results = qf.get_top_rented_items_all_time()
-            for item_id, count in results:
-                print(f"Tavaran ID {item_id}, lainauksia: {count}")
+            for item_id, name, count in results:
+                print(f"Tavaran nimi: {name}, lainauksia: {count}")
+
 
         elif _choice == '12':
             year = int(input("Syötä vuosi: "))
             results = qf.get_top_rented_items_by_year_and_month(year)
-            for month, item_id, count in results:
-                print(f"Kuukausi {month}, Tavaran ID {item_id}, lainauksia: {count}")
+            for month_num, name, count in results:
+                month_str = month_name(month_num)
+                print(f"Kuukausi {month_str}, Tavaran nimi: {name}, lainauksia: {count}")
+
 
         elif _choice == '13':
             year = int(input("Syötä vuosi: "))
             results = qf.get_month_most_items_added(year)
-            for month, count in results:
-                print(f"Eniten tavaroita lisätty kuukausi {month}, tuotteita lisätty: {count}")
-
+            for month_num, count in results:
+                month_str = month_name(month_num)
+                print(f"Eniten tavaroita lisätty kuukausi {month_str}, tuotteita lisätty: {count}")
 
 
 if __name__ == "__main__":
